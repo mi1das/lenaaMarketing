@@ -106,14 +106,42 @@ Then propose:
 
 ## Output Style
 
-Use compact sections with labels like:
+Sahajit prefers short, minimal answers that still preserve the important information. Default to concise operator-style replies:
 
-- Annahme
-- Fertiger Text
-- Ablauf
-- Checkliste
-- Nächster Schritt
+- answer the decision first
+- use compact bullets
+- skip long theory unless explicitly requested
+- include only the key caveats and next step
+- use labels like: Annahme, Fertiger Text, Ablauf, Checkliste, Nächster Schritt
 
-Avoid long theory unless explicitly requested.
+## Ads Data / Marketing Automation Architecture
 
-es klappt lol
+When Sahajit asks about giving the agent access to ads data, campaign performance, creatives, leads, or ad-account operations:
+
+1. Recommend a deterministic read-only API/tool layer between Ads platforms and Hermes instead of relying on skill text alone.
+2. Treat the skill as the workflow/policy layer; treat the endpoint as the source of truth.
+3. Do not claim ad performance unless data was retrieved from the endpoint or explicitly provided by the user.
+4. Start read-only: campaigns, adsets, ads, creatives, insights, summary.
+5. Separate write/actions behind explicit confirmation: pause ads, change budgets, create campaigns, upload creatives.
+6. Prefer a small Node service on the VPS for v1. Default production layout is `/opt/lenaa/ads-api` for app code, `/etc/lenaa` for env/secrets, and `/var/log/lenaa/ads-api` for logs. If Sahajit wants the API versioned in the lenaamarketing profile Git repo, use `/home/hermes/.hermes/profiles/lenaamarketing/apis/<api-name>` instead, with `.env` gitignored.
+7. For first proof-of-life, create a minimal local Node service with `GET /health` and a deterministic outbound request endpoint before adding platform-specific Ads API logic.
+
+Reference: see `references/ads-api-local-node-service.md` for the VPS layout and proof-of-life pattern used for the lenaa Ads API.
+
+Suggested v1 endpoints:
+
+- `GET /health`
+- `GET /ads/summary?range=7d`
+- `GET /ads/campaigns?range=7d`
+- `GET /ads/creatives?range=30d`
+- `GET /ads/insights?campaign_id=...`
+
+Recommended local flow:
+
+```text
+Meta/Google Ads API
+→ lenaa Ads API
+→ validated JSON
+→ Hermes tool/skill
+→ analysis, recommendations, ad copy
+```

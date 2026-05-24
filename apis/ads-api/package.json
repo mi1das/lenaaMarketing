@@ -1,0 +1,15 @@
+{
+  "name": "lenaa-ads-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local deterministic API layer for lenaa ads data.",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test:request": "node scripts/test-request.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

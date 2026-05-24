@@ -1,0 +1,8 @@
+hermes@lenaaHermes:~$ sudo /home/hermes/.local/bin/hermes --profile lenaamarketing gateway install --system --run-as-user hermes
+Error: Profile 'lenaamarketing' does not exist. Create it with: hermes profile create lenaamarketing
+hermes@lenaaHermes:~$ hermes profile list
+
+ Profile          Model                        Gateway      Alias        Distribution
+ ───────────────    ───────────────────────────    ───────────    ───────────    ────────────────────
+ ◆default         gpt-5.5                      running      —            —
+  lenaamarketing  gpt-5.5                      stopped      lenaamarketing —
