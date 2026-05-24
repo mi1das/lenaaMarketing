@@ -1,0 +1,14 @@
+.env
+logs/
+sessions/
+memories/
+audio_cache/
+image_cache/
+sandboxes/
+workspace/
+
+*.log
+
+state.db
+state.db-shm
+state.db-wal
