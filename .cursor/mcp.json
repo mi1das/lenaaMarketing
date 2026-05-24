@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "lenaa-ads": {
+      "command": "npm",
+      "args": ["run", "mcp"],
+      "cwd": "apis/ads-api"
+    }
+  }
+}

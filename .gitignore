@@ -9,6 +9,15 @@ workspace/
 
 *.log
 
+# Local API services under /apis (secrets, deps, runtime logs)
+apis/**/.env
+apis/**/.env.*
+!apis/**/.env.example
+apis/**/node_modules/
+apis/**/logs/
+apis/**/*.log
+apis/**/npm-debug.log*
+
 state.db
 state.db-shm
 state.db-wal

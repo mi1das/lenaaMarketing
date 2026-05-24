@@ -5,11 +5,17 @@
   "type": "module",
   "description": "Local deterministic API layer for lenaa ads data.",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "node --watch src/server.js",
-    "test:request": "node scripts/test-request.js"
+    "start": "node --env-file=.env src/server.js",
+    "dev": "node --env-file=.env --watch src/server.js",
+    "mcp": "node --env-file=.env mcp/server.js",
+    "test:request": "node --env-file=.env scripts/test-request.js",
+    "test:mcp": "node --env-file=.env scripts/test-mcp-tools.js"
   },
   "engines": {
     "node": ">=22"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^4.4.3"
   }
 }

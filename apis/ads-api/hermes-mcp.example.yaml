@@ -1,0 +1,15 @@
+# Fragment für ~/.hermes/config.yaml (Hermes Agent auf dem VPS)
+# Voraussetzung: ads-api läuft auf http://127.0.0.1:3030 (npm start / systemd)
+
+mcp_servers:
+  lenaa_ads:
+    command: "node"
+    args:
+      - "--env-file=/home/hermes/.hermes/profiles/lenaamarketing/apis/ads-api/.env"
+      - "/home/hermes/.hermes/profiles/lenaamarketing/apis/ads-api/mcp/server.js"
+    env:
+      ADS_API_BASE_URL: "http://127.0.0.1:3030"
+    timeout: 120
+    connect_timeout: 60
+
+# Tools erscheinen als: mcp_lenaa_ads_ads_summary, mcp_lenaa_ads_ads_ad_get, ...
