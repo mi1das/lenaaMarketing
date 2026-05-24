@@ -6,7 +6,15 @@ author: Hermes Agent
 license: MIT
 metadata:
   hermes:
-    tags: [lenaa, beauty-salons, phone-agent, marketing, customer-communication, operations]
+    tags:
+      [
+        lenaa,
+        beauty-salons,
+        phone-agent,
+        marketing,
+        customer-communication,
+        operations,
+      ]
 ---
 
 # lenaa Operator
@@ -60,6 +68,7 @@ When drafting or reviewing a phone-agent conversation, cover:
 ## Marketing Defaults for Beauty Salons
 
 Good campaign types:
+
 - Reactivate inactive customers after 60-120 days.
 - Reduce no-shows with reminders and easy rescheduling.
 - Review request after successful appointment.
@@ -67,6 +76,7 @@ Good campaign types:
 - Upsell/cross-sell: treatment add-ons, packages, maintenance appointments.
 
 For each campaign, provide:
+
 - objective
 - target segment
 - channel
@@ -78,6 +88,7 @@ For each campaign, provide:
 ## Support / Debugging Checklist
 
 For lenaa product/support tasks, gather or infer:
+
 - affected salon/customer
 - channel: phone, calendar, CRM, WhatsApp/SMS/email
 - expected behavior
@@ -87,6 +98,7 @@ For lenaa product/support tasks, gather or infer:
 - whether it is urgent/customer-facing
 
 Then propose:
+
 - immediate mitigation
 - root-cause investigation steps
 - customer-facing response
@@ -95,6 +107,7 @@ Then propose:
 ## Output Style
 
 Use compact sections with labels like:
+
 - Annahme
 - Fertiger Text
 - Ablauf
@@ -102,3 +115,5 @@ Use compact sections with labels like:
 - Nächster Schritt
 
 Avoid long theory unless explicitly requested.
+
+es klappt lol
