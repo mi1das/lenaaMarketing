@@ -126,7 +126,12 @@ When Sahajit asks about giving the agent access to ads data, campaign performanc
 6. Prefer a small Node service on the VPS for v1. Default production layout is `/opt/lenaa/ads-api` for app code, `/etc/lenaa` for env/secrets, and `/var/log/lenaa/ads-api` for logs. If Sahajit wants the API versioned in the lenaamarketing profile Git repo, use `/home/hermes/.hermes/profiles/lenaamarketing/apis/<api-name>` instead, with `.env` gitignored.
 7. For first proof-of-life, create a minimal local Node service with `GET /health` and a deterministic outbound request endpoint before adding platform-specific Ads API logic.
 
-Reference: see `references/ads-api-local-node-service.md` for the VPS layout and proof-of-life pattern used for the lenaa Ads API.
+References:
+
+- `references/ads-api-local-node-service.md` for the VPS layout and proof-of-life pattern used for the lenaa Ads API.
+- `references/ads-mcp-meta-tools.md` for the repo-tracked Meta Ads MCP pattern, 14-tool catalog, verification steps, and Hermes activation checklist.
+
+When an MCP layer is present, verify it in this order: local Node API health/catalog → MCP proxy test → Hermes `mcp_servers` config → Hermes/Gateway restart. Do not confuse Cursor MCP config with Hermes native MCP config.
 
 Suggested v1 endpoints:
 

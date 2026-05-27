@@ -541,3 +541,15 @@ platform_toolsets:
 # fallback_model:
 #   provider: openrouter
 #   model: anthropic/claude-sonnet-4
+
+mcp_servers:
+  lenaa_ads:
+    command: "node"
+    args:
+      - "--env-file=/home/hermes/.hermes/profiles/lenaamarketing/apis/ads-api/.env"
+      - "/home/hermes/.hermes/profiles/lenaamarketing/apis/ads-api/mcp/server.js"
+    env:
+      ADS_API_BASE_URL: "http://127.0.0.1:3030"
+    timeout: 120
+    connect_timeout: 60
+

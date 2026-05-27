@@ -202,6 +202,19 @@ If an MCP tool call fails, any credential-like patterns in the error message are
 - Bearer tokens
 - Generic `token=`, `key=`, `API_KEY=`, `password=`, `secret=` patterns
 
+## Local API-backed MCP servers
+
+When an MCP server is only a stdio wrapper around a local HTTP API, verify and daemonize the backing API separately before relying on the MCP tools:
+
+1. Add the MCP server under the same profile's `config.yaml` and include any wrapper env such as `ADS_API_BASE_URL: "http://127.0.0.1:3030"`.
+2. Run `hermes mcp test <server_name>` to confirm connection and tool discovery.
+3. Restart the agent/gateway process for the same profile; MCP tools are discovered at startup.
+4. Call a cheap health tool first, then a real data tool.
+5. If the health tool returns transport errors like `fetch failed`, check the backing API process/port; MCP itself may be configured correctly.
+6. For production, install the backing API as its own `systemd` service with `Restart=always` and `WantedBy=multi-user.target`, then verify `systemctl is-enabled`, `systemctl is-active`, `/health`, and one MCP data call.
+
+See `references/local-api-backed-mcp.md` for a concrete profile + systemd checklist.
+
 ## Troubleshooting
 
 ### "MCP SDK not available -- skipping MCP tool discovery"
@@ -238,6 +251,14 @@ pip install --upgrade mcp
 - Ensure the YAML indentation is correct
 - Look at Hermes Agent startup logs for connection messages
 - Tool names are prefixed with `mcp_{server}_{tool}` -- look for that pattern
+- If `hermes mcp test <name>` discovers tools but a gateway chat cannot call them yet, restart the **same profile's** gateway process; MCP discovery happens at agent startup.
+- For system gateways under a named profile, put `--profile` before the subcommand and use the full binary path under `sudo` if root's PATH cannot find `hermes`:
+
+```bash
+sudo /home/hermes/.hermes/hermes-agent/venv/bin/hermes --profile <profile-name> gateway restart --system
+```
+
+- If a restart command sits at "Gateway Starting..." and logs `No messaging platforms enabled`, it likely started the default profile instead of the intended profile. Stop it with Ctrl+C and rerun with `--profile <profile-name>` before `gateway`.
 
 ### Connection keeps dropping
 

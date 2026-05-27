@@ -1,0 +1,50 @@
+{
+  "jobs": [
+    {
+      "id": "459977e365b1",
+      "name": "Daily Meta Ads \u00dcberblick",
+      "prompt": "Du bist der t\u00e4gliche Meta-Ads-Performance-Operator f\u00fcr lenaa. Erstelle einen kurzen Telegram-tauglichen \u00dcberblick \u00fcber die letzten 7 Tage.\n\nPflichtablauf:\n1. Nutze die lenaa Ads MCP Tools als einzige Datenquelle. Starte mit `mcp_lenaa_ads_ads_health`.\n2. Wenn Health nicht ok oder Meta nicht konfiguriert ist: melde kurz den Fehler und stoppe.\n3. Hole `mcp_lenaa_ads_ads_summary` mit range=`7d`.\n4. Betrachte vor allem aktive Ads (`status` oder `effective_status` = `ACTIVE`).\n5. Wenn m\u00f6glich, hole f\u00fcr aktive Ads zus\u00e4tzlich `mcp_lenaa_ads_ads_ad_insights` mit range=`7d` oder `mcp_lenaa_ads_ads_ad_get`, um Performance und Creative-Kontext zu pr\u00fcfen.\n6. Bestimme die beste aktive Ad anhand verf\u00fcgbarer echter Daten. Priorit\u00e4t: Leads/Conversions, falls vorhanden; sonst CTR, CPC, Clicks, Spend, Impressions/Reach. Wenn ad-level Performance nicht verf\u00fcgbar ist, sage klar, dass die Einsch\u00e4tzung auf den verf\u00fcgbaren Signalen basiert.\n7. Gib genau einen n\u00e4chsten sinnvollen Schritt aus. Keine \u00c4nderungen an Kampagnen vornehmen.\n\nOutput-Format:\n## Meta Ads \u00dcberblick \u2014 letzte 7 Tage\n\nStatus: \u2705/\u26a0\ufe0f\nSpend: X \u20ac \u00b7 Clicks: X \u00b7 Impressions: X \u00b7 CTR: X% \u00b7 CPC: X \u20ac\n\nBeste aktive Ad:\n- Name: ...\n- Warum: ...\n- Signal: ...\n\nWeitere Beobachtungen:\n- ...\n- ...\n\nN\u00e4chster sinnvoller Schritt:\n\u27a1\ufe0f ...\n\nKeine \u00c4nderungen vorgenommen.\n\nHalte es kurz, konkret und business-nah f\u00fcr Sahajit. Keine Rohdaten-Dumps, keine Halluzinationen.",
+      "skills": [
+        "lenaa-ads-performance-operator"
+      ],
+      "skill": "lenaa-ads-performance-operator",
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 8 * * *",
+        "display": "0 8 * * *"
+      },
+      "schedule_display": "0 8 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 4
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-05-24T14:48:05.540349+00:00",
+      "next_run_at": "2026-05-28T08:00:00+00:00",
+      "last_run_at": "2026-05-27T08:00:32.386597+00:00",
+      "last_status": "error",
+      "last_error": "RuntimeError: 'NoneType' object is not iterable",
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "1375295098",
+        "chat_name": "Sahajit",
+        "thread_id": null
+      },
+      "enabled_toolsets": null,
+      "workdir": null,
+      "profile": null
+    }
+  ],
+  "updated_at": "2026-05-27T08:00:32.388158+00:00"
+}

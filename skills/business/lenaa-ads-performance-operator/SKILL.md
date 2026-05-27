@@ -1,0 +1,146 @@
+---
+name: lenaa-ads-performance-operator
+description: Daily/recurring Meta Ads performance operator for lenaa. Uses the lenaa_ads MCP tools as source of truth, analyzes active ads, identifies winners/losers, and recommends the next sensible marketing step.
+version: 1.0.0
+author: Hermes Agent
+license: MIT
+metadata:
+  hermes:
+    tags: [lenaa, meta-ads, marketing, cron, mcp, performance]
+---
+
+# lenaa Ads Performance Operator
+
+Use this skill for recurring or one-off Meta Ads performance checks for lenaa.
+
+## Core Rules
+
+1. **MCP data is the source of truth.** Never invent ad performance. Only report metrics retrieved via the lenaa Ads MCP tools or explicitly provided by Sahajit.
+2. **Decision support is the job.** The report should make Sahajit's next decision as easy as possible. Do not just describe data; interpret what should be done today.
+3. **Trends matter as much as snapshots.** Always look for what is getting better, what is getting worse, and what changed versus yesterday / previous period when data is available.
+4. **Read-only by default.** Do not pause ads, change budgets, create campaigns, or edit creatives unless Sahajit explicitly approves a concrete action.
+5. **Focus on active ads.** Prioritize ads with `status` or `effective_status` = `ACTIVE`. Mention paused ads only if useful context.
+6. **Keep reports short and operator-style.** Sahajit prefers concise Telegram-ready summaries in the voice of an experienced performance marketing operator.
+7. **Beauty-salon context matters.** Interpret creatives through lenaa's promise: fewer missed calls, less interruption during treatments, more booked appointments, calmer salon operations.
+
+## MCP Tools
+
+Available Hermes tool names may be prefixed as `mcp_lenaa_ads_...` in live sessions. Core logical tools:
+
+- `ads_health` — service status and Meta config.
+- `ads_summary(range)` — account overview: campaigns, ads, totals, creatives and insights.
+- `ads_ads_list(limit, after)` — all ads including creative text.
+- `ads_ad_get(id)` — full ad view: ad, creative, ad set, insights for 7d and 30d.
+- `ads_ad_insights(id, range)` — individual ad performance.
+- `ads_campaigns_list(limit, after)` / `ads_campaign_insights(id, range)` — campaign context.
+- `ads_adsets_list(limit, after)` / `ads_adset_insights(id, range)` — ad set context and targeting.
+- `ads_creative_get(id)` — creative details.
+
+## Creative Knowledge Store
+
+Use Obsidian as the creative source of truth when available. Resolve the vault path from `OBSIDIAN_VAULT_PATH`; if it is unset, proceed with Meta/MCP data only and clearly state that no Obsidian creative context is connected yet. For setup and workflow details, see `references/obsidian-creative-source.md`.
+
+Rules:
+
+- MCP/Meta tools answer **what performed**.
+- Obsidian notes answer **why we thought it would perform** and preserve script/idea context.
+- Search Obsidian for ad names, hooks, scripts, angles, creator names, offers, and campaign ideas before inferring creative rationale.
+- If matching notes are missing or incomplete, explicitly say the creative context is incomplete and infer only from visible Meta creative text.
+- When a pattern is repeatedly supported by performance data, suggest saving it in Obsidian as a learning.
+
+## Standard Analysis Flow
+
+For daily overview:
+
+1. Call `ads_health`. If not ok or `metaConfigured` is false, report the issue and stop.
+2. Call `ads_summary` for `7d`.
+3. If available, compare against yesterday / previous period / 30d context to identify trends and changes.
+4. Identify active ads from the returned ads list.
+5. Search Obsidian creative notes for the top/worst active ads if `OBSIDIAN_VAULT_PATH` is configured.
+6. For each active ad, call `ads_ad_insights(id, range='7d')` if ad-level insights are needed and available.
+7. Optionally call `ads_ad_get(id)` for the top 1-3 ads to inspect creative text and context.
+8. Rank active ads by practical performance:
+   - Primary: qualified leads / conversions / lead quality if present.
+   - If no lead metric is present: CTR, CPC, CPM trend, spend, clicks, impressions, reach.
+   - Treat very low spend/impressions as insufficient data.
+9. Explicitly answer: what got better, what got worse, which campaign/creative is best, which is worst, and what this means for today's budget/creative decision.
+10. Explain the likely **why** behind winners/losers using both performance data and creative/script context.
+11. Compare against account totals and previous/30d context if available.
+12. Produce a short recommendation: scale, keep learning, refresh creative, duplicate winner, test new hook, reduce attention on weak ad, or shift budget from weak to strong performer.
+
+## KPI Interpretation
+
+Use these default heuristics unless better account-specific benchmarks exist:
+
+- CTR > 2%: good attention signal.
+- CTR < 1%: weak hook/creative signal.
+- CPC rising with weak CTR: creative likely not resonating.
+- High CTR but low leads: landing page/form/offer mismatch likely.
+- Good performance with meaningful spend: candidate to scale or duplicate.
+- Good performance with tiny spend: monitor, don't overreact.
+- Weak performance with enough spend: propose new creative angle before budget changes.
+
+## Daily Telegram Report Format
+
+Use this structure exactly unless Sahajit asks otherwise. Keep every section as short as possible:
+
+```text
+## Meta Ads Tagesfazit
+
+Neueste Ad: [Name]
+Rohwerte: Spend X€ · Impr. X · Klicks X · CTR X% · CPC X€ · Leads X · CPL X€
+Kurzinterpretation: ...
+
+Generelle Interpretation:
+- ...
+
+1. Gesamtfazit des Tages
+- ...
+
+2. Positive Entwicklungen
+- ...
+
+3. Probleme/Warnsignale
+- ...
+
+4. Beste Kampagnen/Creatives
+- ...
+
+5. Schlechteste Kampagnen/Creatives
+- ...
+
+6. Leadqualität
+- ...
+
+7. Empfehlungen für heute
+➡️ ...
+
+Keine Änderungen vorgenommen.
+```
+
+Style rules:
+
+- Start with raw values for the newest active ad, then immediately give the shortest possible interpretation of those values.
+- After that, give a very short general interpretation before the numbered sections.
+- Speak like an experienced performance marketing operator.
+- Make decisions easy: what improved, what worsened, what to do today.
+- Prefer sentences like: "Heute 14% profitabler als gestern", "CPM steigt seit 2 Tagen", "Creative 3 hat die beste Conversion Rate", "Budget von B auf A verschieben".
+- Avoid dashboard talk, long explanations, raw tables without interpretation, irrelevant metrics, and complicated language.
+- Keep it concise. Include IDs only if needed for actionability.
+
+## No-Hallucination Fallbacks
+
+If data is missing:
+
+- Say exactly what is missing.
+- Do not infer leads or conversions from clicks.
+- If only account-level insights exist, say ranking is based on available signals, not confirmed leads.
+- If a tool fails, include the failing tool and the error in one short line.
+
+## Suggested Next-Step Patterns
+
+- Winner with clear creative angle: "Neue Variante mit gleichem Hook bauen, anderer Einstieg/Visual."
+- High interruption-pain creative works: "Mehr Creatives rund um 'Telefon klingelt während Behandlung' testen."
+- Calculator/lost-revenue angle works: "Lead-Magnet stärker testen, CTA klarer machen."
+- Low CTR: "Hook in den ersten 2 Sekunden erneuern; weniger erklären, schneller Schmerz zeigen."
+- High CTR but weak lead result: "Offer/Form prüfen; 14 Tage kostenlos + 200€ Garantie prominenter testen."

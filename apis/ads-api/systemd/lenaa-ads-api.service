@@ -1,0 +1,22 @@
+[Unit]
+Description=lenaa Ads API - Meta Ads deterministic local API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=hermes
+Group=hermes
+WorkingDirectory=/home/hermes/.hermes/profiles/lenaamarketing/apis/ads-api
+Environment=HOME=/home/hermes
+Environment=NODE_ENV=production
+Environment=PATH=/home/hermes/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStart=/home/hermes/.local/bin/node --env-file=/home/hermes/.hermes/profiles/lenaamarketing/apis/ads-api/.env /home/hermes/.hermes/profiles/lenaamarketing/apis/ads-api/src/server.js
+Restart=always
+RestartSec=5
+TimeoutStopSec=30
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
